@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ 	<title> Let's have fun with Java Script </title>
+ </head>
+ <body>
+ 
+
+ <h3> This is where I am originally from </h3>
+ <p> You can play with cool features</p>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript"> 
+
+//Default is where all options are turned off, false.
+	var map ;
+	var myOptions;
+	var Map_create= false;
+	var Zoom = false;
+	var Streetview = false;
+	var Dragging = false;
+	var Scrolling = false;
+	var Map_kinds = false;
+	var Scale = false;
+	var Rotating = false;
+	var Center = new google.maps.LatLng(37.7833, 125.4167);
+	var Zoom_default = 5;
+
+	// Creating button which allows us to turn on and off using if/else statement
+	window.onload = function() {
+		initialize();
+		
+		button_type("mapMaker", "Details");
+		if(Map_create){default_color("mapMaker","1");}else{default_color("mapMaker","2");}
+
+		button_type("zoomControl", "Zoom");
+		if(Zoom){default_color("zoomControl","1");}else{default_color("zoomControl","2");}
+
+		button_type("streetViewControl", "Street View");
+		if(Streetview){default_color("streetViewControl","1");}else{default_color("streetViewControl","2");}
+
+		button_type("draggable", "Draggable");
+		if(Dragging){default_color("draggable","1");}else{default_color("draggable","2");}
+
+		button_type("scrollwheel", "Scroll Wheel");
+		if(Scrolling){default_color("scrollwheel","1");}else{default_color("scrollwheel","2");}
+
+		button_type("mapTypeControl", "Map Type");
+		if(Map_kinds){default_color("mapTypeControl","1");}else{default_color("mapTypeControl","2");}
+
+		button_type("scaleControl", "Scale Control");
+		if(Scale){default_color("scaleControl","1");}else{default_color("scaleControl","2");}
+
+		button_type("rotateControl", "Rotate Control");
+		if(Rotating){default_color("rotateControl","1");}else{default_color("rotateControl","2");}
+	}
+
+	//Usage of switch function, which allows two different options to change when the button is clicked.
+	function buttonclick(obj){
+		var id = obj.id.substr(0,obj.id.length-1);
+		var id_result = obj.id.substr (obj.id.length-1,1);
+		Zoom_default = map.getZoom();
+		Center = map.getCenter();
+		switch(id){
+			case "mapMaker" :  Map_create = default_color(id,id_result); break;
+			case "zoomControl" : Zoom = default_color(id,id_result); break;
+			case "streetViewControl" : Streetview = default_color(id,id_result); break;
+			case "draggable" : Dragging = default_color(id,id_result); break;
+			case "scrollwheel" : Scrolling = default_color(id,id_result); break;
+			case "mapTypeControl" : Map_kinds = default_color(id,id_result); break;
+			case "scaleControl" : Scale = default_color(id,id_result); break;
+			case "rotateControl" : Rotating = default_color(id,id_result); break;
+		}
+		map.setOptions(optionSetting()) ;
+		
+	}
+
+	//make everything to be initalize using Google's API, SDK
+	function initialize() {
+		myOptions  = optionSetting();  
+		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+		google.maps.event.addListener(map,'center_changed',function(){
+			setTimeout(center_changed_event,100);
+		});
+		google.maps.event.addListener(map,'zoom_changed',function(){
+			setTimeout(zoom_changed_event,100);
+		});		
+	}
+
+	//These functions will return the value of zoom level, latitude, and longtitude
+	function zoom_changed_event(){
+		var map_data = map.getZoom();
+		document.getElementById('zoom_text').value = map_data;
+	}
+	function center_changed_event(){
+		var map_data = map.getCenter();
+		document.getElementById('latitude').value=map_data.latitude();
+		document.getElementById('longtitude').value=map_data.longtitude();
+	}
+
+	//ADD objects with properties  { key : value }
+	function optionSetting(){
+		var data = {       
+			zoom: Zoom_default,       
+			center:  Center,       
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			mapMaker : Map_create,						
+			zoomControl : Zoom,
+			streetViewControl : Streetview,
+			draggable  : Dragging,
+			scrollwheel : Scrolling,
+			mapTypeControl : Map_kinds,
+			scaleControl : Scale,
+			rotateControl : Rotating,
+		};
+		return data;
+	}
+	
+	// Changing colors between two choices
+	function default_color(id,id_result){
+		var getvalue;
+		if(id_result == "1"){
+			document.getElementById(id+"1").style.color = "#4169E1";
+			document.getElementById(id+"1").style.backgroundColor = "#708090";
+			document.getElementById(id+"2").style.color = "#708090";
+			document.getElementById(id+"2").style.backgroundColor = "#4169E1";
+			getvalue = true;			
+		}else{
+			document.getElementById(id+"1").style.color = "#708090";
+			document.getElementById(id+"1").style.backgroundColor = "#4169E1";
+			document.getElementById(id+"2").style.color = "#4169E1";
+			document.getElementById(id+"2").style.backgroundColor = "#708090";
+			getvalue = false;
+		}
+		return getvalue;
+	}
+
+	//changing the style/frame of buttons
+	function button_type(div_id,div_name){
+		var div = document.createElement('div');
+		div.id = div_id;
+		document.getElementById("pannel").appendChild(div);
+		document.getElementById(div_id).innerHTML += "<table cellpadding=1 cellspacing=0 border=0 width=250px><tr><td>&nbsp;<SPAN style='font-size:15px'>"+div_name+ "</SPAN></td><td width=110px>" + "<input id='"+div_id+"1' type=button value=On style='border-style:solid;border-color:#008000;background-color:#008000;color:#00FF00;width:50px;' onclick='buttonclick(this)' ><input id='"+div_id+"2' type=button value=Off style='border-style:solid;border-color:#008000;background-color:#00FF00;color:#008000;width:50px;' onclick='buttonclick(this)'></td></table>";
+	}
+
+	//creating empty array for markers then adding new markers into array_marker
+	var array_marker = [];
+	function checkmarker(){
+		var marker = new google.maps.Marker({
+			position : map.getCenter(),
+			map : map,
+			title : map.getCenter()+''
+		});
+		array_marker.push(marker); 
+	}
+
+	//make array in to Null Values
+	function clearmarker(){
+		if(array_marker){
+			for(i in array_marker){
+				array_marker[i].setMap(null);
+			}
+		}
+	}
+</script>
+
+
+<table cellpadding=0 cellspacing=1 border=0 style="background-color:#1E90FF;">
+	<tr>
+		<td style="background-color:#E0FFFF">
+			<div id="map_canvas" style="width:250px;height:250px;"></div>
+		</td>
+		<td  style="background-color:#E0FFFF">
+			<div id="pannel"></div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2  style="background-color:#E0FFFF">
+			<table cellpadding=0 cellspacing=0 border=0>
+				<tr>
+					<td>
+						<table cellpadding=0 cellspacing=0 border=0>
+						<tr><td style='font-size:15px' align=center>Latitude</td><td width=20px></td><td><input type=text id=latitude style='border-style:solid;border-color:#1E90FF;width:110px'></td></tr>
+						<tr><td style='font-size:15px' align=center>Longtitude</td><td width=20px></td><td><input type=text id=longtitude style='border-style:solid;border-color:#1E90FF;width:110px'></td></tr>
+						<tr><td style='font-size:15px' align=center>Zoom</td><td width=15px></td><td><input type=text id=zoom_text style='border-style:solid;border-color:#1E90FF;width:110px'></td></tr>
+						</table>
+					</td>
+					<td width=11px>
+					</td>
+					<td>
+						<table cellpadding=0 cellspacing=0 border=0>
+							<tr><td><input type="button" value="Marking" onclick="checkmarker()" style='border-style:solid;border-color:#1E90FF;width:110px;'></td></tr>
+							<tr><td height=15px></td></tr>
+							<tr><td align='center'><input type="button" value="Clear" onclick="clearmarker()" style='border-style:solid;border-color:#1E90FF;width:110px;'></td></tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

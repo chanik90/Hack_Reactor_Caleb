@@ -1,0 +1,250 @@
+body {
+	margin: 0;
+	text-align: center;
+}
+
+h1 {
+	color: white;
+	margin: 0;
+	font-size: 70px;
+	text-align: center;
+
+}
+
+h2 {
+	font-size: 30px;
+	letter-spacing: 0.35em;
+	color: blue;
+}
+
+.jumbotron {
+  background: url(../img/bg.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 500px;
+  opacity:0.8;
+
+}
+
+.title {
+	margin: 0 auto;
+	position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#Personal_Website {
+  font-weight: 400;
+  letter-spacing: 0.8em;
+  margin-bottom: 85px;
+}
+
+#websiteD {
+  margin-top: 85px;
+  font-weight: 300;
+}
+
+#websiteD h2{
+	color:white;
+	font-family: cursive;
+}
+
+.description {
+	padding-bottom: 10px
+}
+
+#self{
+	border-radius: 50%;
+	border: 5px solid black;
+	width: 33%; 
+	display: block; 
+	margin-top: 25px; 
+	margin-left: auto; 
+	margin-right: auto;  
+	margin-bottom: 15px;
+-webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  -ms-transition: all 0.2s ease-out;
+  -o-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+
+#self:hover {
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+#des_Text{
+	margin-left: 25px;
+	margin-right: 25px;
+}
+
+.services {
+	padding-top: 5px;
+	background: #f9f6f6;
+}
+
+
+.languages {
+	width: 24%;
+	display: inline-block;
+	margin: 0 auto;
+	overflow: hidden;
+	vertical-align: top;
+}
+
+.services section img {
+	display: block;
+	margin: 0 auto;
+	width: 50%;  
+	z-index:-3; 
+	color: #ad9365;
+}
+
+.services section {
+	width: 32%;
+	display: inline-block;
+	margin: 15px auto;
+}
+
+.dimg {
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  -ms-transition: all 0.2s ease-out;
+  -o-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+
+
+.dimg:hover {
+-webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+.services section p {
+	width: 75%;
+	margin: 0 auto;
+	color: darkgrey;
+}
+
+.services h3 {
+	font-size: 20px;
+	color: #c4a958;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	margin-top: 50px;
+	display: inline-block;
+}
+
+.services h4 {
+	font-size: 20px;
+	color: #ad9365;
+	margin-bottom: 15px;
+	margin-top: 10px;
+}
+
+span {
+	color: blue;
+}
+
+.services span {
+	color: grey;
+}
+
+.button {
+  position: relative;
+  display: table;
+  margin: 0 auto 50px auto;
+  border: 1px solid #c5b395;
+  padding: 10px 15px 10px 20px;
+  background: white;
+  background: transparent;
+  font-size: 0.95em;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.23em;
+  color: #a4906e;
+  overflow: hidden;
+  text-decoration: none;
+  -webkit-transition: 0.2s ease-in-out;
+  -moz-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  -ms-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+.button:hover{
+	border: 1px solid #a4906e;
+	color: #807056;
+	box-shadow: 0px 0px 5px rgba(183,161,123,0.4);
+}
+
+.links {
+	background: #f9f6f6; 
+}
+
+.linkedin {
+ 	margin-top: 15px;
+ 	margin-bottom: 15px;
+ 	margin-right: 60px;
+ 	width: 30px;
+ 	height:30px;
+ 	opacity: 0.4;
+ 	display:inline-block;
+ 	background: url('../img/linkedin.png') center top no-repeat;
+}
+
+.linkedin:hover{
+	opacity: 1;
+	background-image: url('../img/linkedin-black.png') ;
+}
+
+.github {
+	margin-top: 15px;
+ 	margin-bottom: 15px;
+ 	width: 30px;
+ 	height:30px;
+ 	display:inline-block;
+ 	opacity: 0.4;
+ 	background: url('../img/github.png') center top no-repeat;
+}
+
+.github:hover{
+	opacity: 1;
+	background-image: url('../img/github_black.png') ;
+}
+
+ul {
+	margin: 0 auto 40px auto;
+	padding: 0;
+	text-align: center;
+}
+
+ul li { 
+	color: darkgrey;
+}
+
+
+.divider {
+	width: 50%;
+	height: 25px;
+
+}
+
+
+
+@media (max-width: 480px) {
+	.languages {
+		width: 100%;
+		color:blue;
+	}
+
+}
