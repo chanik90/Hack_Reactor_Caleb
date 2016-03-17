@@ -1,0 +1,509 @@
+<%@page import="club.model1.ClubTO"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+     <%
+   // 게시판 번호
+   int board_no = 10;
+   request.setAttribute("board_no", board_no);
+   
+   String searched_city = "";
+   String searched_location = "";
+   String searchWord = "";
+   
+   if(request.getParameter("theme_city") != null) {
+       searched_city = request.getParameter("theme_city");
+   }
+   if(request.getParameter("theme_location") != null) {
+      searched_location = request.getParameter("theme_location");
+   }
+   if(request.getParameter("searchWord") != null) {
+      searchWord = request.getParameter("searchWord");
+   }
+   
+   int cpage = (Integer) request.getAttribute("cpage");
+   ArrayList<ClubTO> lists = (ArrayList) request.getAttribute("lists");
+
+
+
+   int startBlock = (Integer) request.getAttribute("startBlock");
+   int endBlock = (Integer) request.getAttribute("endBlock");
+   int totalPage = (Integer) request.getAttribute("totalPage");
+   int blockPerPage = (Integer) request.getAttribute("blockPerPage");
+    
+   StringBuffer result = new StringBuffer();
+   
+   ArrayList<StringBuffer> map_list= new ArrayList();
+
+   for (int i=0 ; i<lists.size() ; i++) {
+      ClubTO to = lists.get(i);
+      
+      
+      int club_seq = Integer.parseInt(to.getClub_seq());
+      String theme_city = to.getTheme_city();
+      String theme_location = to.getTheme_location();
+      String subject = to.getSubject();
+      String writer = to.getWriter();
+      int applicants=Integer.parseInt(to.getApplicants_count());
+      int wdate =Integer.parseInt( to.getWdate());
+      String wdate_str="";
+      if(wdate<0){
+         wdate_str="미래날짜";         
+      }else if(wdate<60){//60초보다작으면
+         wdate_str=(int)wdate+"초 전";
+      }else if(wdate<(60*60)){//60분보다 작으면
+         wdate_str=(int)(wdate/60)+"분 전";
+      }else if(wdate<(60*60*24)){//24시간보다 작으면
+         wdate_str=(int)(wdate/(60*60))+"시간 전";
+      }else if(wdate<(60*60*24*30)){//30일보다 작으면
+         wdate_str=(int)(wdate/(60*60*24))+"일 전";
+      }else if(wdate<(60*60*24*365)){//365일보다 작으면
+         wdate_str=(int)(wdate/(60*60*24*30))+"달 전";
+      }else{//기타
+         wdate_str=(int)(wdate/(60*60*24*365))+"년 전";
+      }
+       
+      int recommend = Integer.parseInt(to.getRecommend_count());
+      int hit = Integer.parseInt(to.getHit());
+      int comment_count = Integer.parseInt(to.getComment_count());
+      String meetingdate=to.getMeetingdate();
+      
+      int club_time=Integer.parseInt(to.getClub_time());
+      String time_str="";
+      if(club_time<0){
+         time_str="모임종료";         
+      }else if(club_time<60){//60초보다작으면
+         time_str=(int)club_time+"초 남음";
+      }else if(club_time<(60*60)){//60분보다 작으면
+         time_str=(int)(club_time/60)+"분 남음";
+      }else if(club_time<(60*60*24)){//24시간보다 작으면
+         time_str=(int)(club_time/(60*60))+"시간 남음";
+      }else if(club_time<(60*60*24*30)){//30일보다 작으면
+         time_str=(int)(club_time/(60*60*24))+"일 남음";
+      }else if(club_time<(60*60*24*365)){//365일보다 작으면
+         time_str=(int)(club_time/(60*60*24*30))+"달 남음";
+      }else{//기타
+         time_str=(int)(club_time/(60*60*24*365))+"년 남음";
+      }
+      System.out.println("jsp:"+applicants+"//"+recommend+"//"+comment_count);
+   
+      result.append("<li class='list-group-item list-group-item-height'>");
+      result.append("      <div class='list-title-wrapper club-list-title'>");
+      result.append("         <div class='list-tag'>");
+      result.append("            <span>" + club_seq + "</span>");
+      if(theme_city.equals("")) {
+         result.append("            <a href='./club?action=list&theme_city=" + theme_city +"' class='label label-info'>" + "전체 지역"+ "</a>");
+      } else {
+         result.append("            <a href='./club?action=list&theme_city=" + theme_city +"' class='label label-info'>" + theme_city + "</a>");
+      }
+      if(theme_location.equals("")) {
+         result.append("            <a href='./club?action=list&theme_location=" + theme_location +"' class='label label-info'>" + "전체 동물" + "</a>");
+      } else {
+         result.append("            <a href='./club?action=list&theme_location=" + theme_location +"' class='label label-info'>" + theme_location + "</a>");
+      }
+
+       result.append("         </div>");
+      result.append("         <h5 class='list-group-item-heading'>"); 
+      result.append("            <a href='./club?action=view&cpage="+ cpage +"&board_no="+ board_no +"&club_seq="+ club_seq +"'><span class='sale-link'>"+ subject +"</span></a>");
+      result.append("         </h5>");
+      result.append("      </div>");
+      result.append("      <div class='list-summary-wrapper'>");
+      result.append("         <ul>");   
+      
+      result.append("            <div class=\"club-list-time\">");
+      result.append("           <li><img src='./img/clock.png' title='남은시간'>"+time_str+"</li>"); 
+      result.append("            </div>");
+      
+      result.append("           <li><img src='./img/applicants.png' title='참여자 수'>"+applicants+"</li>");         
+      result.append("            <li><img src='./img/comment.png' title='댓글'>" + comment_count + "</li>");
+      result.append("            <li><img src='./img/heart.png' title='좋아요'>" + recommend + "</li>");
+      result.append("            <li><img src='./img/hit.png' title='조회'>" + hit + "</li>");
+      result.append("         </ul>");
+      result.append("      </div>");
+      result.append("      <div class='list-group-item-writer item-float'>");
+      result.append("         <div class='avatar-info'>");
+      result.append("            <div class=\"dropdown\">");
+      result.append("               <a href=\"\" class=\"list-nickname sale-link\" data-toggle=\"dropdown\">" + writer + "</a>");
+      result.append("               <ul class=\"dropdown-menu user-dropdown-menu\" role=\"menu\">");
+      result.append("                  <li>");
+      result.append("                     <a href=\"javascript:popupOpen('"+writer+"');\" id=\"message\">쪽지 보내기</a>");
+      result.append("                  </li>");
+      result.append("                  <li>");
+      result.append("                     <a href=\"./user?action=userInfo&nickname="+writer+"\">유저정보</a>");
+      result.append("                  </li>");
+      result.append("               </ul>");
+      result.append("            </div>");
+      result.append("            <div class='date-created' title='2015-10-01 12:06:25.0'>" + wdate_str + "</div>");
+      result.append("      </div>");
+      result.append("      </div>");
+      result.append("</li>");
+      
+      
+//       map_result 수정
+      
+      StringBuffer map_result= new StringBuffer();
+      map_result.append("<div class='club-loc-info'>");
+      map_result.append("            <span>" + club_seq + "</span>");
+      
+      if(theme_city.equals("")) {
+         map_result.append("            <a href='./club?action=list&theme_city=" + theme_city +"' class='label label-info'>" + "전체 지역"+ "</a>");
+      } else {
+         map_result.append("            <a href='./club?action=list&theme_city=" + theme_city +"' class='label label-info'>" + theme_city + "</a>");
+      }
+      
+      if(theme_location.equals("")) {
+         map_result.append("            <a href='./club?action=list&theme_location=" + theme_location +"' class='label label-info'>" + "전체 지역" + "</a>");
+      } else {
+         map_result.append("            <a href='./club?action=list&theme_location=" + theme_location +"' class='label label-info'>" + theme_location + "</a>");
+      }
+       
+      map_result.append("         <h5 class='list-group-item-heading club-map-heading'>");
+      map_result.append("            <a href='./club?action=view&cpage="+ cpage +"&board_no="+ board_no +"&club_seq="+ club_seq +"'><span class='sale-link'>"+ subject +"</span></a>");
+      map_result.append("         </h5>");
+      map_result.append("         <hr style='border:1px solid #eee; margin:10px 0px;'>"); 
+      
+      map_result.append("      <div class='club-item-bottom'>");
+      map_result.append("         <div class='sale-item-title-bottom-left'>");   
+      map_result.append("            <a href='./user?action=userInfo&nickname="+writer+"' class='club-item-icon'>"); 
+      map_result.append("               <img src='./img/default-user-icon.png'>");            
+      map_result.append("            </a>");               
+      map_result.append("            <a href='' class='sale-link'><span class='club-item-nickname'>"+ writer +"</span></a>");   
+      map_result.append("         </div>");
+      
+      
+      map_result.append("         <div class='club-list-ul'>");
+      map_result.append("            <ul>"); 
+      map_result.append("              <li><img src='./img/applicants.png' title='참여자 수'>"+applicants+"</li>");   
+      map_result.append("              <li><img src='./img/clock.png' title='남은시간'>"+time_str+"</li>"); 
+      map_result.append("            </ul>");
+      map_result.append("         </div>");
+      map_result.append("      </div>");
+      
+      
+//       map_result.append("               <a href='' class='list-nickname' data-toggle='dropdown'>" + writer + "</a>");
+//       map_result.append("            <div class='date-created' title='2015-10-01 12:06:25.0'>" + wdate_str + "</div>");
+      map_result.append("</div>");
+      
+      
+      map_list.add(map_result);
+      
+      
+      
+      
+   }
+   
+%>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<title>Insert title here</title> 
+   <link rel="stylesheet" href="./css/style.css"/>
+     <script src="http://maps.google.com/maps/api/js?key=AIzaSyA3a_sdcsPxLe-cd9_tNi1vfoX5OeZxr7k&signed_in=true"></script>
+
+  
+   <script type="text/javascript">
+   $(document).ready(function(){
+      $('#club').addClass('active');
+      $('[data-toggle="tooltip"]').tooltip({
+          trigger: "hover",
+          });
+      $('#message').click(function popupOpen(){
+         var popUrl = "./user?action=message" ;   //팝업창에 출력될 페이지 URL
+         var popOption = "width=850, height=650, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+            window.open(popUrl,"",popOption);
+         });
+      
+      
+      
+      
+      
+   });
+   var prev_infowindow =false; 
+   var lat=new Array();
+    var lng=new Array();
+    var memo=new Array();
+    var time_check=new Array();
+    <% 
+    for(int j=0;j<lists.size();j++){
+        ClubTO to2 = lists.get(j);
+        int club_time2=Integer.parseInt(to2.getClub_time());
+        System.out.println(club_time2);
+    %>
+       time_check[<%=j%>]=<%=club_time2%>
+       console.log(time_check[<%=j%>]);
+       lat[<%=j%>] = '<%=to2.getLatitude()%>';
+       lng[<%=j%>] = '<%=to2.getLongitude()%>';
+       memo[<%=j%>]="<%=map_list.get(j)%>";
+    <%
+    }
+    %>
+    
+    
+   function mapopen(){
+       var marker;
+       var latitude;
+      var longitude ;
+      navigator.geolocation.getCurrentPosition(function (position){ 
+         //현재위치검색
+         latitude = position.coords.latitude; 
+         longitude = position.coords.longitude; 
+          //현재위치기반 지도띄우기
+          var map = new google.maps.Map( $("#club-list-map")[0], {
+            zoom: 14,
+            center:new google.maps.LatLng(latitude,longitude),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+         });
+                //약속장소위치 마커
+                
+          var now_marker =new google.maps.Marker({ 
+              position:new google.maps.LatLng(latitude,longitude), 
+              map:map ,
+              animation: google.maps.Animation.BOUNCE ,
+              icon:"img/man.png"   
+          });
+         
+                
+               for(var i=0;i<lat.length;i++){
+                console.log("체크"+time_check[i]);
+                  if(time_check[i]<0){
+                     console.log("ddddddddd"+time_check[i]);
+                  }else{
+                     
+                  marker =new google.maps.Marker({ 
+                        position:new google.maps.LatLng(lat[i],lng[i]), 
+                        map:map 
+                     
+                 }); 
+                  //인포 생성,
+               google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                  
+                          return function() {
+                              var infowindow = new google.maps.InfoWindow({
+                                  content: memo[i],
+                                  removable : true
+                              });
+                           
+                              if( prev_infowindow ) {
+                                  prev_infowindow.close();
+                               }
+                               prev_infowindow = infowindow;
+                              
+                            infowindow.open(map, marker);
+                            map.panTo(new google.maps.LatLng(lat[i],lng[i]));
+                           }
+                      })(marker, i));
+                  
+                  }//else문종료
+                
+               }
+   
+      },function (error){ 
+           alert(error); 
+      })
+       
+
+   }
+    
+    var popupOpen = function(receiver) { 
+         var popUrl = "./user?action=message&receiver=" + receiver; 
+         console.log(popUrl);
+         var popOption = "width=850, height=650, resizable=no, scrollbars=no, status=no;"; //팝업창 옵션(optoin)
+         window.open(popUrl, "send_message", popOption); 
+      }  
+   </script>
+</head> 
+<body>
+<div class="layout-container">
+      <div class="main">
+         <!-- 사이드바 시작 -->
+         <jsp:include page="../../sidebar_1depth.jsp" flush="true"></jsp:include>
+         <jsp:include page="../../sidebar_club.jsp" flush="true"></jsp:include>
+         <!-- 사이드바 끝 -->
+
+         <!--    메인시작 -->
+
+         <div class="content">
+            <div class="nav">
+               <a href="./club?action=write" class="btn btn-default btn-wide pull-right"> 글쓰기 </a>
+               <h4>모임</h4>
+            </div>
+
+            <div class="category-filter-wrapper">
+               <form name="boardform">
+                  <div class="community-form-group">
+                     <select class="form-control" name="theme_city" id="city">
+                        <option value="">전체지역</option>
+                        <option value="서울">서울</option>
+                        <option value="경기도">경기도</option>
+                        <option value="인천">인천</option> 
+                        <option value="부산">부산</option>
+                        <option value="대전">대전</option>
+                        <option value="대구">대구</option>
+                     </select>
+
+
+                     <div class="club-form-tab">
+                        <ul class="list-inline">
+                           <li class="active"><a data-toggle="tab" href="#club-list-board">게시판으로 보기</a></li>
+                           <li ><a data-toggle="tab" href="#club-list-map" onclick=mapopen() >지도로 보기</a></li>
+                        </ul>
+                     </div>
+
+
+
+                     <div class="community-search-bar">
+                        <input type="search" name="query" class="form-control"
+                           placeholder="검색어" /> <span class="input-group-btn"><button
+                              type="submit" class="btn btn-default">검색</button></span>
+                     </div>
+
+                  </div>
+               </form>
+         </div>
+
+
+
+
+<!--          게시판 형식 부분 시작 -->
+            <div id="club-list-board"  class="tab-pane in active">
+            
+               <div class="panel panel-default">
+               <ul class="list-group">
+                  <!-- 게시글 리스트 -->
+<!-- 
+                  <li class='list-group-item list-group-item-height'>
+                     <div class='list-title-wrapper club-list-title'>
+                        <div class='list-tag'>
+                           <span>123</span> <a href='' class='label label-info'>서울</a>
+                        </div>
+                        <h5 class='list-group-item-heading'>
+                           <a
+                              href='./club?action=view'>제목입력란입니다.</a>
+                        </h5>
+                     </div>
+                     <div class='list-summary-wrapper'>
+                        <ul>
+                           <li><img src='./img/applicants.png' title='참여자 수'>0</li>
+                           <li><img src='./img/comment.png' title='댓글수'>0</li>
+                           <li><img src='./img/heart.png' title='추천수'>0</li>
+                           <li><img src='./img/hit.png' title='조회수'>0</li>
+                        </ul>
+                     </div>
+                     <div class='list-group-item-writer item-float'>
+                        <div class='avatar-info'>
+                           <div class="dropdown">
+                              <a href="" class="list-nickname" data-toggle="dropdown">작성자</a>
+                              <ul class="dropdown-menu user-dropdown-menu" role="menu">
+                                 <li><a href="javascript:popupOpen();" id="message"> 쪽지 보내기 </a></li>
+                                 <li><a href="./user?action=userInfo"> 유저정보 </a></li>
+                              </ul>
+                           </div>
+                           <div class='date-created' title='2015-10-01 12:06:25.0'>2015-10-15</div>
+                        </div>
+                     </div>
+                  </li>-->
+
+
+<%= result %>
+               </ul>
+            </div>
+
+            <div class="community-pagebar">
+<!--             페이지네이션 시작 -->
+               <ul class="pagination">
+                  <% 
+                     if(startBlock == 1) {
+                        out.println("<li class='disabled'>");
+                        out.println("<span>《</span>");
+                        out.println("</li>");
+                     } else {
+                        out.println("<li>");
+                        out.println("<a href='club?action=list&theme_city=" + searched_city  + "&theme_location=" + searched_location + "&searchWord="+ searchWord + "&cpage=" + (startBlock - blockPerPage) + "'>《</a>");
+                        out.println("</li>");
+                     }
+                  
+                     if(cpage == 1) {
+                        out.println("<li class='disabled'>");
+                        out.println("<span>〈</span>");
+                        out.println("</li>");
+                     } else {
+                        out.println("<li>");
+                        out.println("<a href='club?action=list&theme_city=" + searched_city  + "&theme_location=" + searched_location + "&searchWord="+ searchWord + "&cpage="+ (cpage -1) +"'>〈</a>");
+                        out.println("</li>");
+                     }
+                  %>
+                  
+                  <%
+                     for(int i=startBlock ; i<=endBlock ; i++) {
+                        if(cpage == i) {
+                           out.println("<li>");
+                           out.println("<span>");
+                           out.println("<b>" + i + "</b>");
+                           out.println("</span>");
+                           out.println("</li>");
+                        } else {
+                           out.println("<li>");
+                           out.println("<a href='club?action=list&theme_city=" + searched_city  + "&theme_location=" + searched_location + "&searchWord=" + searchWord + "&cpage=" + i + "'>" + i + "</a>&nbsp;");
+                           out.println("</li>");
+                        }
+                     }
+                  %>
+                  
+                  <%
+                     if(cpage == totalPage) {
+                        out.println("<li class='disabled'>");
+                        out.println("<span>〉</span>");
+                        out.println("</li>");
+                     } else {
+                        out.println("<li>");
+                        out.println("<a href='club?action=list&theme_city=" + searched_city  + "&theme_location=" + searched_location+ "&searchWord=" + searchWord + "&cpage=" + (cpage + 1) + "'>〉</a>");
+                        out.println("</li>");
+                     }
+
+                     if(endBlock == totalPage) {
+                        out.println("<li class='disabled'>");
+                        out.println("<span>》</span>");
+                        out.println("</li>");
+                     } else {
+                        out.println("<li>");
+                        out.println("<a href='club?action=list&theme_city=" + searched_city  + "&theme_location=" + searched_location+ "&searchWord=" + searchWord + "&cpage=" + (startBlock + blockPerPage) + "'>》</a>");
+                        out.println("</li>");
+                     }
+                  %>   
+                </ul>
+<!--             페이지네이션 끝 -->
+            </div>
+      
+         </div>
+         
+         <!-- 지도로 보기 시작 -->
+         <div id="club-list-map" class="tab-pane club-list-map"">
+            <div id="club-list-map"></div>
+         </div> 
+<!-- 지도로 보기 끝 -->
+         
+<!--          게시판 형식 부분 끝 -->
+
+
+         <!--    메인 끝 -->
+      </div>
+      
+<!-- 광고배너 시작 -->
+
+<div class="join-right-banner-wrapper">
+   <div class="right-banner"><img src="./img/googlead.jpg"/></div>
+</div>
+
+<!-- 광고배너 끝 -->
+
+
+   </div>
+   </div>
+</body>
+</html>
