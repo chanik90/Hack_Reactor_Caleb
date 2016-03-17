@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<title> Your Favorite School </title>
+    	<link rel="stylesheet" href="css/style2.css">
+    	<script src="javascript/university.js"> </script>
+    </head>
+
+    <body>
+                <div class="headimg">
+    	<h2 class="title"> University Choices </h2></div>
+    	<form name = "myform">
+    		<p><label for="email_add"> Email Address: <input id="email_add" type="text" size="30" class ="diffchoice email_address"> </label> </p>
+    	<p> Size:
+    		<select id="size" class="diffchoice">
+    			<option value = "" selected> Choose a size of school </option>
+    			<option value = "Small"> Small (Less than 5,000) </option>
+    			<option value = "Medium"> Medium (5,000 - 15,000) </option>
+    			<option value = "Large"> Large (More than 15,000) </option>
+    		</select>
+    	</p>
+    	<p> Options:
+    		<label for = "scholarship"><input type="checkbox" id="scholarship" value="YES">Scholarship </label>
+    		<label for="tuition"><input type="checkbox" id="tuition" value="YES"> Tuition (Public School Only) </label>
+    	<p> Type of School : &nbsp; &nbsp;
+    		<label for ="publicS"><input type = "radio" id="publicS" name="types" value='publicS' class = 'radio'> Public School </label>
+    		<label for ="privateS"><input type = "radio" id="privateS" name="types" value="privateS" class="radio"> Private School </label>
+    	</p>
+    	<p>
+    		<label for = "GPA"> Enter your GPA (Rounded to two decimals) <br>
+    			GPA: <input id='GPA' type ='text' size= '4' maxlength='4' class='GPACheck'> </label>
+    	</p>
+    	<p> <input type="submit" value="Submit">&nbsp;<input type="reset"></p>
+    </form>
+                <p> After submitting all your information correctly, we will contact you with recommended universities via email. Thank you. </p>
+    </body>
+</html>
